@@ -552,7 +552,7 @@ class KundeAddresseController extends Controller
 
         $addresse->foretrukken = 1;
         $addresse->save();
-        
+
         return response('Adresse sat til foretrukken', 200);
     }
 

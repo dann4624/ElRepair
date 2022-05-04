@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Addresse;
 use App\Models\By;
-use App\Models\Kunde;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 
+//Swagger Annotations
 /**
  * @OA\get(
  *      path="/addresser",
@@ -232,6 +232,7 @@ use Illuminate\Support\Collection;
 
 class AddresseController extends Controller
 {
+    // Liste af Objekter
     /**
      * Display a listing of the resource.
      *
@@ -239,14 +240,23 @@ class AddresseController extends Controller
      */
     public function index()
     {
+        // Hent data
         $data = Addresse::orderBy('id','ASC')->with('by')->get();
+
+        // Skjul properties
         $data->makeHidden(['by_postnummer']);
+
+        // Tæl antal af data
         if(count($data) == 0){
+            // Send 404 Ingen objekt
             return response('Ingen Addresser', 404);
         }
+
+        // Send Data
         return $data;
     }
 
+    // Opret Objekt
     /**
      * Store a newly created resource in storage.
      *
@@ -255,15 +265,22 @@ class AddresseController extends Controller
      */
     public function store(Request $request)
     {
+        // Opret nyt objekt
         $data = (new Addresse);
+
+        // Sæt properties på objekt
         $data->vej = $request->vej;
         $data->vej_nummer = $request->vej_nummer;
         $data->by_postnummer = $request->postnummer;
+
+        // Send til Database
         $data->save();
 
+        // Send 202 Objekt oprettet respons
         return response('Addresse oprettet', 202);
     }
 
+    // Specifik Objekt
     /**
      * Display the specified resource.
      *
@@ -272,14 +289,20 @@ class AddresseController extends Controller
      */
     public function show($id)
     {
+        // Find specifik Objekt
         $data = Addresse::where('id','=',$id)->with('by')->first();
+
+        // Tjekt om specifikt objekt blev fundet
         if(!$data){
+            // Send 404 objekt ikke fundet response hvis objektet ikke findes
             return response('Addresse ikke fundet', 404);
         }
 
+        // Send data
         return $data;
     }
 
+    // Opdater Specifik Objekt
     /**
      * Update the specified resource in storage.
      *
@@ -290,27 +313,40 @@ class AddresseController extends Controller
     public function update($id,Request $request)
     {
         // Postman requires Post Method and "_method":"put" as form-data
+        // Find objekt
         $data = Addresse::where('id','=',$id)->first();
 
+        // Tjek om objekt blev fundet
         if(!$data){
+            // Send 404 objekt ikke fundet response hvis objektet ikke blev fundet
             return response('Addresse ikke fundet', 404);
         }
+
+        // Skjul properties
         $data->makeHidden(['by_postnummer']);
 
+        // Find specifik data
         $post_nummer_input = $request->postnummer;
         $post_nummer = By::where('postnummer','=',$post_nummer_input)->first();
+
+        // Tjek om data blev fundet
         if(!$post_nummer){
             return response('By ikke fundet', 404);
         }
 
+        // Opdater properties
         $data->vej = $request->vej;
         $data->vej_nummer = $request->vej_nummer;
         $data->by_postnummer = $request->postnummer;
+
+        // Send data til Database
         $data->save();
 
+        // Send 200 objekt opdateret response
         return response('Addresse opdateret', 200);
     }
 
+    // Slet Specifik Objekt
     /**
      * Remove the specified resource from storage.
      *
@@ -319,28 +355,53 @@ class AddresseController extends Controller
      */
     public function destroy($id)
     {
+        // Find det specifikke objekt
         $data = Addresse::where('id','=',$id)->first();
+
+        // Tjek om objektet blev fundet
         if(!$data){
+            // Hvis objektet ikke blev fundet, send en 404 objekt ikke fundet response
             return response('Addresse ikke fundet', 404);
         }
+
+        // Slet objektet
         $data->delete();
+
+        // Send 204 objekt slettet response
         return response('Addresse slettet', 204);
     }
 
+    // Ændre Foretrukken status på Objektet
+    /**
+     * Opdater foretrukken status på Addressen
+     *
+     * @param  int  $id
+     * @return Response
+     */
+
     public function foretrukken($id){
+        // Find det specifikke objekt
         $data = Addresse::where('id',$id)->first();
+
+        // Tjek om objektet blev fundet
         if(!$data){
+            // Hvis objektet ikke blev fundet, send en 404 objekt ikke fundet response
             return response('Addresse ikke fundet', 404);
         }
+
+        // Hvis addressen er foretrukken, sæt den til ikke foretrukken
         if($data->foretrukken == 1){
             $data->foretrukken = 0;
-            $data->save();
         }
+        // Hvis addressen ikke er foretrukken, sæt den til foretrukken
         else{
             $data->foretrukken = 1;
-            $data->save();
         }
 
-        return response('Foretrukken Addresse opdateret', 200);
+        // Send data til Databasen
+        $data->save();
+
+        // Send 200 Addresse foretrukken status opdateret
+        return response('Addresse foretrukken status opdateret', 200);
     }
 }

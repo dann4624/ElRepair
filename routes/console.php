@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
+// Denne fil er Laravel standard og ikke aktivt udviklet
+// Denne fil bliver brugt til SSH (PuTTY / Tera Term) indhold
+
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');

@@ -8,19 +8,27 @@ use Illuminate\Database\Eloquent\Model;
 class Apitoken extends Model
 {
     use HasFactory;
+
+    // Sætter påkrævede properties
     protected $fillable = [
-      'token'
+      'token',
+      'target_id',
     ];
 
+    // Skjuler properties i JSON
+    protected $hidden = [
+        'target_id',
+    ];
+
+    // Caster properties til andre typer / formater
     protected $casts = [
         'created_at'  => 'date:d-m-Y H:i:s',
         'updated_at'  => 'date:d-m-Y H:i:s',
     ];
 
-    protected $hidden = [
-        'target_id',
-    ];
-
+    /*
+     * Relationer til andre Modeller / Tabeller
+     */
     public function target()
     {
         return $this->belongsTo(Tokentarget::class);

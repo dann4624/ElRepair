@@ -9,6 +9,7 @@ class Sag extends Model
 {
     use HasFactory;
 
+    // Sætter påkrævede properties
     protected $fillable = [
         'indlevering',
         'status_skift',
@@ -22,6 +23,7 @@ class Sag extends Model
         'afhentningstype_id',
     ];
 
+    // Skjuler properties i JSON
     protected $hidden = [
         'medarbejder_id',
         'kunde_id',
@@ -31,6 +33,7 @@ class Sag extends Model
         'afhentningstype_id',
     ];
 
+    // Caster properties til andre typer / formater
     protected $casts = [
         'status_skift'  => 'date:d-m-Y H:i:s',
         'indlevering'  => 'date:d-m-Y H:i:s',
@@ -38,6 +41,9 @@ class Sag extends Model
         'updated_at'  => 'date:d-m-Y H:i:s',
     ];
 
+    /*
+     * Relationer til andre Modeller / Tabeller
+     */
     public function medarbejder()
     {
         return $this->belongsTo(Medarbejder::class);

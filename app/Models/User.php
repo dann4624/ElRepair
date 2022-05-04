@@ -1,5 +1,5 @@
 <?php
-
+// Standard Laravel User
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;

@@ -9,6 +9,7 @@ class Kunde extends Model
 {
     use HasFactory;
 
+    // Sætter påkrævede properties
     protected $fillable = [
         'fornavn',
         'efternavn',
@@ -17,17 +18,22 @@ class Kunde extends Model
         'email'
     ];
 
+    // Skjuler properties i JSON
     protected $hidden = [
         'username',
         'password',
         'pivot'
     ];
 
+    // Caster properties til andre typer / formater
     protected $casts = [
         'created_at'  => 'date:d-m-Y H:i:s',
         'updated_at'  => 'date:d-m-Y H:i:s',
     ];
 
+    /*
+     * Relationer til andre Modeller / Tabeller
+     */
     public function addresser()
     {
         return $this->belongsToMany(Addresse::class,'kundes_addresses');

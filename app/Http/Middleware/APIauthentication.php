@@ -17,12 +17,18 @@ class APIauthentication
      */
     public function handle(Request $request, Closure $next)
     {
+        // Tjekker Header for Bearer Token Authentication
         $token = $request->bearerToken();
+
+        // Tjekker om Token fra Bearer Token Authentication er i systemet
         $api_token = Apitoken::where('token','=', $token)->first();
+
+        // Hvis Token er i systemet accepteres http request'en
         if ($api_token) {
-            //auth()->login($user);
             return $next($request);
         }
+
+        // Hvis Token IKKE sendes en 403 Unauthenticated response
         return response([
             'message' => 'Unauthenticated'
         ], 403);

@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Root af Website: http://elrepair.semeicardia.online
+Route::get('/', function () {
+    return "Requires '/api/'; EG: ".$_SERVER['SERVER_NAME']."/api/";
+});
+
+
+/*
+ * Artisan Endpoins
+ */
+
+// Endpoint til at ryde indholds cache
 Route::get('/artisan/cache/clear', function() {
     Artisan::call('route:clear');
     Artisan::call('config:clear');
@@ -20,6 +32,7 @@ Route::get('/artisan/cache/clear', function() {
     echo "Cleared Cache";
 });
 
+// Endpoint til at cache indhold
 Route::get('/artisan/cache/all', function() {
     Artisan::call('route:cache');
     Artisan::call('config:cache');
@@ -27,11 +40,8 @@ Route::get('/artisan/cache/all', function() {
     echo "ReCached";
 });
 
+// Endpoint til at generere Swagger dokument
 Route::get('/artisan/swagger', function() {
     Artisan::call('l5-swagger:generate');
     echo "ReCached";
-});
-
-Route::get('/', function () {
-    return "Requires '/api/'; EG: ".$_SERVER['SERVER_NAME']."/api/";
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Afhentningstype;
 use Illuminate\Http\Request;
 
+//Swagger Annotations
 /**
  * @OA\get(
  *      path="/afhentningstyper",
@@ -161,10 +162,16 @@ class AfhentningstypeController extends Controller
      */
     public function index()
     {
+        // Hent data
         $data = Afhentningstype::orderBy('id','ASC')->get();
+
+        // Tæl antal af data
         if(count($data) == 0){
+            // Send 404 Ingen objekt
             return response('Ingen Afhentningstyper', 404);
         }
+
+        // Send Data
         return $data;
     }
 
@@ -176,10 +183,16 @@ class AfhentningstypeController extends Controller
      */
     public function store(Request $request)
     {
+        // Opret nyt objekt
         $data = (new Afhentningstype());
+
+        // Sæt properties på objekt
         $data->navn = $request->navn;
+
+        // Send til Database
         $data->save();
 
+        // Send 202 Objekt oprettet respons
         return response('Afhentningstype oprettet', 202);
     }
 
@@ -191,10 +204,16 @@ class AfhentningstypeController extends Controller
      */
     public function show($id)
     {
+        // Find specifikt object
         $data = Afhentningstype::where('id','=',$id)->first();
+
+        // Tjek om specifikt objekt blev fundet
         if(!$data){
+            // Hvis det specifikke objekt ikke blev fundet, send 404 Objekt ikke fundet response
             return response('Afhentningstype ikke fundet', 404);
         }
+
+        // Send data
         return $data;
     }
 
@@ -208,14 +227,23 @@ class AfhentningstypeController extends Controller
     public function update($id,Request $request)
     {
         // Postman requires Post Method and "_method":"put" as form-data
+
+        // Find specifikt object
         $data = Afhentningstype::where('id','=',$id)->first();
+
+        // Tjek om det specifikke objekt blev fundet
         if(!$data){
+            // Hvis det specifikke objekt ikke blev fundet, send 404 Objekt ikke fundet response
             return response('Afhentningstype ikke fundet', 404);
         }
 
+        // Opdater properties
         $data->navn = $request->navn;
+
+        // Opdater data i databasen
         $data->save();
 
+        // Send 200 Objekt opdateret response
         return response('Afhentningstype opdateret', 200);
     }
 
@@ -227,12 +255,19 @@ class AfhentningstypeController extends Controller
      */
     public function destroy($id)
     {
+        // Find specifikt object
         $data = Afhentningstype::where('id','=',$id)->first();
+
+        // Tjek om det specifikke objekt blev fundet
         if(!$data){
+            // Hvis det specifikke objekt ikke blev fundet, send 404 Objekt ikke fundet response
             return response('Afhentningstype ikke fundet', 404);
         }
+
+        // Opdater data fra databasen
         $data->delete();
 
+        // Send 204 Objekt slettet response
         return response('Afhentningstype slettet', 204);
     }
 }

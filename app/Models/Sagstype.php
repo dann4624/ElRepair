@@ -8,17 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class Sagstype extends Model
 {
     use HasFactory;
+
+    // Sætter tabel navn for Eloquent ORM, når ikke standard tabel navne bliver brugt
     protected $table = "sag_types";
+
+    // Sætter påkrævede properties
     protected $fillable = [
         'name',
         'pris'
     ];
 
+    // Caster properties til andre typer / formater
     protected $casts = [
         'created_at'  => 'date:d-m-Y H:i:s',
         'updated_at'  => 'date:d-m-Y H:i:s',
     ];
 
+    /*
+     * Relationer til andre Modeller / Tabeller
+     */
     public function sager()
     {
         return $this->hasMany(Sag::class);

@@ -12,6 +12,7 @@ class Medarbejder extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    // Sætter påkrævede properties
     protected $fillable = [
         'fornavn',
         'efternavn',
@@ -19,18 +20,21 @@ class Medarbejder extends Authenticatable
         'password',
     ];
 
+    // Skjuler properties i JSON
     protected $hidden = [
         'username',
         'password',
     ];
 
+    // Caster properties til andre typer / formater
     protected $casts = [
         'created_at'  => 'date:d-m-Y H:i:s',
         'updated_at'  => 'date:d-m-Y H:i:s',
     ];
 
-
-
+    /*
+     * Relationer til andre Modeller / Tabeller
+     */
     public function sager()
     {
         return $this->hasMany(Sag::class);
